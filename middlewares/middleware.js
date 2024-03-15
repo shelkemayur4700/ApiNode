@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { getUserByUsername } = require("../db/db");
+const multipart = require("connect-multiparty");
+const path = require("path");
 //its a very special middleware, it takes four arguments
 // then express automatically knows it is error middleware
 //4 arguments only you hve to pass to middleware
@@ -73,9 +75,28 @@ const checkAuthorization = (req, res, next) => {
     });
   }
 };
+// --------------Connect-MultipartyMiddleware-------
+const multipartMiddleware = multipart({
+  uploadDir: `${path.join(__dirname, "../uploades")}`,
+  // console.log("????", `${path.join(__dirname, "../uploades")}`);
+});
+
+// -------Multer middleware which is used to upload file on s3 
+// const multerMiddleware = (req, file)=>{
+//   const storage = multer.memoryStorage({
+//     const upload = multer({ storage }).single("file")
+//   destination: function (req, file, callback) {
+//     callback(null, "")
+//   }
+// });
+// }
+
+
+
 module.exports = {
   errorMiddleware,
   encryptPassword,
   checkPassword,
   checkAuthorization,
+  multipartMiddleware,
 };

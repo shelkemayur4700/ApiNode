@@ -5,6 +5,10 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileuploadRoute = require("./routes/fileUploadRoute");
 const { errorMiddleware } = require("./middlewares/middleware");
+const cors = require("cors");
+
+
+app.use(cors());
 app.use(express.json());
 app.use(express.static("uploades"));
 app.use("/auth", authRouter);

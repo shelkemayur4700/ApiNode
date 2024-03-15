@@ -1,14 +1,29 @@
 const express = require("express");
 const router = express.Router();
-const { fileupload } = require("../controllers/fileuploadcontroller");
-const multipart = require("connect-multiparty");
-const path = require("path");
-const multipartMiddleware = multipart({
-  uploadDir: `${path.join(__dirname, "../uploades")}`,
+const {
+  fileupload,
+  getUploadedFiles,
+  s3fileupload,
+  S3fileUpload,
+} = require("../controllers/fileuploadcontroller");
+const { multipartMiddleware } = require("../middlewares/middleware");
+const multer = require("multer");
+
+const storage = multer.memoryStorage({
+  destination: function (req, file, callback) {
+    callback(null, "");
+  },
 });
-// console.log("????", `${path.join(__dirname, "../uploades")}`);
-{
-  /*----------SIGNUP-ROUTES-------------- */
-}
+
+const upload = multer({ storage }).single("file");
+
+// console.log("upload", upload);
+// ---------------cloudinsary file uploading route --------------------
 router.post("/", multipartMiddleware, fileupload);
+// ---------------s3 file uploading route --------------------
+router.post("/S3", upload, S3fileUpload);
+
+// -----------get all uploaded files -------------
+router.get("/files", getUploadedFiles);
+
 module.exports = router;

@@ -1,13 +1,16 @@
 const { getAllUsers, getUserById, UpdateUserById } = require("../db/db");
-
 // --------------GET ALL USERS------------------------
-const getuserData = (req, res) => {
-  const users = getAllUsers();
-
-  res.json({
-    message: "Success",
-    data: users,
-  });
+const getuserData = (req, res, next) => {
+  getAllUsers()
+    .then((users) => {
+      res.json({
+        message: "Success",
+        data: users,
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 // --------------------------GET USER BY ID ---------------------------
 const getuserById = (req, res) => {

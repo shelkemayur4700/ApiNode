@@ -1,22 +1,23 @@
-const { createUser } = require("../db/db");
+const { createUser, _createUser } = require("../db/db");
 var jwt = require("jsonwebtoken");
 const signup = (req, res, next) => {
   const user = req.body;
-  let result = createUser(user);
-  if (result) {
-    res.json({
-      status: "Success",
-      message: "User Created",
-    });
-  } else {
-    //throw will stops the all process and showing stack strace(error in console)
-    //any may excit the server
-    // throw new Error("Eroooooooooooooor");
+  let result = _createUser(user)
+    .then((result) => {
+      res.json({
+        status: "Success",
+        message: "User Created",
+      });
+    })
+    .catch((err) => {
+      //throw will stops the all process and showing stack strace(error in console)
+      //any may excit the server
+      // throw new Error("Eroooooooooooooor");
 
-    //if you invoken  next like this anywhere in code
-    //it will just hit error middleware
-    next(new Error("User Already Exists!"));
-  }
+      //if you invoken  next like this anywhere in code
+      //it will just hit error middleware
+      next(new Error("User Already Exists!"));
+    });
 };
 // ------------------login------------
 const login = (req, res) => {

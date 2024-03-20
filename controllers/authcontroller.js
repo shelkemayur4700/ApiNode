@@ -1,7 +1,10 @@
-const { createUser, _createUser } = require("../db/db");
+const { createUser, _createUser, getUserByUsername } = require("../db/db");
 var jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
 const signup = (req, res, next) => {
   const user = req.body;
+  console.log("user", user);
   let result = _createUser(user)
     .then((result) => {
       res.json({
@@ -20,15 +23,36 @@ const signup = (req, res, next) => {
     });
 };
 // ------------------login------------
-const login = (req, res) => {
+const login = async (req, res, next) => {
   //issue the jwt token
-  const token = jwt.sign({ username: req.body.username }, process.env.JWTKEY);
-
-  res.json({
-    status: "Success",
-    token: token,
-    message: "User Logged in",
-  });
+  // console.log("req.body.userName", req.body.userName);
+  let user = await getUserByUsername(req.body.userName);
+  if (user) {
+    bcrypt.compare(req.body.password, user.password, function (err, result) {
+      //this is not working properly when we pass wrong password
+      if (!result) {
+        next("Enter correct userName and Password");
+      } else {
+        const token = jwt.sign(
+          { username: req.body.userName },
+          process.env.JWTKEY
+        );
+        res.json({
+          status: "Success",
+          token: token,
+          message: "User Logged In",
+        });
+      }
+    });
+  } else {
+    next("User Not found");
+  }
 };
+
+// you have to check for the passwords
+
+// then you have to issue the token
+
+// issuing the jwt
 
 module.exports = { signup, login };

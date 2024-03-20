@@ -20,7 +20,7 @@ const encryptPassword = (req, res, next) => {
   //so use it minimum. like 10
   const saltRounds = 10;
   bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-    console.log(hash);
+    // console.log(hash);
     req.body.password = hash;
     next();
   });
@@ -81,7 +81,7 @@ const multipartMiddleware = multipart({
   // console.log("????", `${path.join(__dirname, "../uploades")}`);
 });
 
-// -------Multer middleware which is used to upload file on s3 
+// -------Multer middleware which is used to upload file on s3
 // const multerMiddleware = (req, file)=>{
 //   const storage = multer.memoryStorage({
 //     const upload = multer({ storage }).single("file")
@@ -90,8 +90,6 @@ const multipartMiddleware = multipart({
 //   }
 // });
 // }
-
-
 
 module.exports = {
   errorMiddleware,

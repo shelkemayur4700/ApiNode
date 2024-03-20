@@ -9,6 +9,7 @@ const userSchema = new Schema({
     type: String,
   },
   age: Number,
+  password: String,
 });
 
 //so the modal is actual entity on which we will perform opern

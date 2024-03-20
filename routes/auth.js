@@ -9,5 +9,5 @@ router.post("/signup", encryptPassword, signup);
 {
   /*----------SIGNIN-ROUTES-------------- */
 }
-router.post("/signIn", checkPassword, login);
+router.post("/signIn", login);
 module.exports = router;

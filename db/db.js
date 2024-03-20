@@ -31,7 +31,6 @@ const _createUser = (userData) => {
           rej("UserName Already Exists");
         } else {
           const user = new User(userData);
-
           // it will save the user
           res(user.save());
         }
@@ -48,10 +47,12 @@ const getAllUsers = () => {
   // return USERS;
   return User.find();
 };
-// -------------GET USER BY NAME----------------------
+// -------------GET USER BY USERNAME----------------------
 const getUserByUsername = (username) => {
-  return USERS.find((ele) => ele.username == username);
+  console.log(User.findOne({ userName: username }));
+  return User.findOne({ userName: username });
 };
+
 // ------------------GET USER BY ID--------------------------------
 const getUserById = (id) => {
   return USERS.find((ele) => ele.id == id);
@@ -67,9 +68,9 @@ const UpdateUserById = (id, data) => {
 };
 module.exports = {
   getAllUsers,
-  getUserByUsername,
   createUser,
   getUserById,
   UpdateUserById,
   _createUser,
+  getUserByUsername,
 };

@@ -57,15 +57,25 @@ const getUserByUsername = (username) => {
 const getUserById = (id) => {
   return USERS.find((ele) => ele.id == id);
 };
-// ------------------UPDATE USER BY ID--------------------------------
+// ------------------UPDATE USER BY ID BY MONGODB--------------------------------
 const UpdateUserById = (id, data) => {
-  let filtered = USERS.filter((ele) => ele.id != id);
-  // adding id to newly updated/added data
-  data.id = id;
-  filtered.push(data);
-  USERS = [...filtered];
-  return true;
+  return User.updateOne({ _id: id }, { $set: { ...data } });
 };
+// ------------------UPDATE USER BY ID AND USERNAME--------------------------------
+const UpdateUserByIdandName = (id, data) => {
+  //when you are updating user on the basis of two entity in this case name and id you have to pass the name in body old one
+  //query is look for combination of id and name both then update the data in DB
+  return User.updateOne({ _id: id, name: data.name }, { $set: { ...data } });
+};
+// ------------------DELETE USER BY ID--------------------------------
+const DeleteUserById = (id) => {
+  return User.deleteOne({ _id: id });
+};
+// ------------------ PAGINATION OF USER DATA--------------------------------
+const getPaginatedData = (limit, page) => {
+  return User.find().skip(limit * page).limit(limit);
+};
+
 module.exports = {
   getAllUsers,
   createUser,
@@ -73,4 +83,7 @@ module.exports = {
   UpdateUserById,
   _createUser,
   getUserByUsername,
+  UpdateUserByIdandName,
+  DeleteUserById,
+  getPaginatedData,
 };

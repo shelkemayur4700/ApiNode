@@ -1,4 +1,11 @@
-const { getAllUsers, getUserById, UpdateUserById } = require("../db/db");
+const {
+  getAllUsers,
+  getUserById,
+  UpdateUserById,
+  UpdateUserByIdandName,
+  DeleteUserById,
+  getPaginatedData,
+} = require("../db/db");
 // --------------GET ALL USERS------------------------
 const getuserData = (req, res, next) => {
   getAllUsers()
@@ -23,16 +30,64 @@ const getuserById = (req, res) => {
   });
 };
 // --------------------------UPDATE USER BY ID ---------------------------
-const updateuserById = (req, res) => {
-  const data = UpdateUserById(req.params.id, req.body);
+const updateuserById = (req, res, next) => {
+  UpdateUserById(req.params.id, req.body)
+    .then((data) => {
+      res.json({
+        message: "Success",
+        data,
+      });
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+// --------------------------UPDATE USER BY ID AND USERNAME ALSO ---------------------------
+const updateuserByIdAndUserName = (req, res, next) => {
+  UpdateUserByIdandName(req.params.id, req.body)
+    .then((data) => {
+      res.json({
+        message: "Success",
+        data,
+      });
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+// ------------------DELETE USER BY ID----------------
+const deleteuserById = (req, res, next) => {
+  DeleteUserById(req.params.id)
+    .then((data) => {
+      res.json({
+        message: "Success",
+        data,
+      });
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+// ------------------PAGINATED DATA OF USER ----------------
+const getUserDataPaginated = (req, res, next) => {
+  console.log(req.query);
 
-  res.json({
-    message: "Success",
-    data,
-  });
+  getPaginatedData(req.query.page, req.query.limit)
+    .then((data) => {
+      res.json({
+        message: "Success",
+        data,
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 module.exports = {
   getuserData,
   getuserById,
   updateuserById,
+  updateuserByIdAndUserName,
+  deleteuserById,
+  getUserDataPaginated,
 };

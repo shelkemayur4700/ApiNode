@@ -7,10 +7,10 @@ const fileuploadRoute = require("./routes/fileUploadRoute");
 const { errorMiddleware } = require("./middlewares/middleware");
 const cors = require("cors");
 
-
 app.use(cors());
 app.use(express.json());
 app.use(express.static("uploades"));
+app.use(express.urlencoded({ extended: true })); //redirect file
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/uploads", fileuploadRoute);

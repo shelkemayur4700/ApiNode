@@ -71,10 +71,28 @@ const UpdateUserByIdandName = (id, data) => {
 const DeleteUserById = (id) => {
   return User.deleteOne({ _id: id });
 };
-// ------------------ PAGINATION OF USER DATA--------------------------------
-const getPaginatedData = (limit, page) => {
-  return User.find().skip(limit * page).limit(limit);
+// ------------------ PAGINATION WITH SORTING OF USER DATA--------------------------------
+const getPaginatedData = (
+  limit = 10,
+  page = 0,
+  sortField,
+  sortOrder,
+  search
+) => {
+  // if your request is not sending limit and page values it takes 10 and 0 theses are default values
+  //sortField = On which field you want to sort the data
+  //[]:1 = Asc and [sortField]:-1= Desc
+  sortOrder = sortOrder == "desc" ? -1 : 0; //crosscheck once fro asc
+  const re = new RegExp(search, "gi");
+  return User.find({ name: { $regex: re } })
+    .skip(limit * page)
+    .limit(limit)
+    .sort({ [sortField]: sortOrder });
 };
+// // ------------------ PAGINATION On USER DATA--------------------------------
+// const getPaginatedData = (limit, page) => {
+//   return User.find().skip(limit * page).limit(limit);
+// };
 
 module.exports = {
   getAllUsers,

@@ -72,10 +72,16 @@ const deleteuserById = (req, res, next) => {
 const getUserDataPaginated = (req, res, next) => {
   console.log(req.query);
 
-  getPaginatedData(req.query.page, req.query.limit)
+  getPaginatedData(
+    req.query.limit,
+    req.query.page,
+    req.query.sortField,
+    req.query.sortOrder,
+    req.query.search
+  )
     .then((data) => {
       res.json({
-        message: "Success",
+        message: "Success pagination",
         data,
       });
     })

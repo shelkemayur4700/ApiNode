@@ -21,7 +21,6 @@ const fileuploads3 = (file) => {
       if (err) {
         rej(err);
       }
-
       res(result);
     });
   });

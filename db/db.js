@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 let USERS = []; //making it let becuse we are updating it in updateUserById call
 
 const { User } = require("./schemas/User");
+const Order = require("./schemas/Order");
 
 // ---------------------CREATE USER-----------------
 // USING NORMAL ARRAY
@@ -94,6 +95,23 @@ const getPaginatedData = (
 //   return User.find().skip(limit * page).limit(limit);
 // };
 
+// -------------------------------PLACE ORDER-------------------------------------
+const saveOrder = (orderData) => {
+  const order = new Order(orderData);
+  return order.save();
+};
+
+const calculateTotalOrder = (name) => {
+  return Order.aggregate([
+    { $match: { userName: name } },
+    {
+      $group: {
+        _id: "$userName",
+        totalsum: { $sum: "$totalAmount" },
+      },
+    },
+  ]);
+};
 module.exports = {
   getAllUsers,
   createUser,
@@ -104,4 +122,6 @@ module.exports = {
   UpdateUserByIdandName,
   DeleteUserById,
   getPaginatedData,
+  saveOrder,
+  calculateTotalOrder,
 };
